@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# deepclaude — Use Claude Code with DeepSeek V4 Pro or other cheap backends
+# deepclaude — Use Claude Code with DeepSeek V4.1 or other cheap backends
 # Usage: deepclaude [--backend ds|or|fw|anthropic] [--remote] [--status] [--cost] [--benchmark]
 
 set -euo pipefail
@@ -50,24 +50,24 @@ resolve_backend() {
             key="${DEEPSEEK_API_KEY:-}"
             [[ -z "$key" ]] && { echo "ERROR: DEEPSEEK_API_KEY not set" >&2; exit 1; }
             url="$DEEPSEEK_URL"
-            opus="deepseek-v4-pro"; sonnet="deepseek-v4-pro"
-            haiku="deepseek-v4-flash"; subagent="deepseek-v4-flash"
+            opus="deepseek-v4.1"; sonnet="deepseek-v4.1"
+            haiku="deepseek-v4.1-flash"; subagent="deepseek-v4.1-flash"
             ;;
         or|openrouter)
             key="${OPENROUTER_API_KEY:-}"
             [[ -z "$key" ]] && { echo "ERROR: OPENROUTER_API_KEY not set" >&2; exit 1; }
             url="$OPENROUTER_URL"
-            opus="deepseek/deepseek-v4-pro"; sonnet="deepseek/deepseek-v4-pro"
-            haiku="deepseek/deepseek-v4-pro"; subagent="deepseek/deepseek-v4-pro"
+            opus="deepseek/deepseek-v4.1"; sonnet="deepseek/deepseek-v4.1"
+            haiku="deepseek/deepseek-v4.1-flash"; subagent="deepseek/deepseek-v4.1-flash"
             ;;
         fw|fireworks)
             key="${FIREWORKS_API_KEY:-}"
             [[ -z "$key" ]] && { echo "ERROR: FIREWORKS_API_KEY not set" >&2; exit 1; }
             url="$FIREWORKS_URL"
-            opus="accounts/fireworks/models/deepseek-v4-pro"
-            sonnet="accounts/fireworks/models/deepseek-v4-pro"
-            haiku="accounts/fireworks/models/deepseek-v4-pro"
-            subagent="accounts/fireworks/models/deepseek-v4-pro"
+            opus="accounts/fireworks/models/deepseek-v4.1"
+            sonnet="accounts/fireworks/models/deepseek-v4.1"
+            haiku="accounts/fireworks/models/deepseek-v4.1-flash"
+            subagent="accounts/fireworks/models/deepseek-v4.1-flash"
             ;;
         anthropic) ;;
         *) echo "ERROR: Unknown backend '$BACKEND'. Use: ds, or, fw, anthropic" >&2; exit 1 ;;
@@ -96,7 +96,7 @@ show_status() {
     echo "    FIREWORKS_API_KEY:   $(mask_key "${FIREWORKS_API_KEY:-}")"
     echo ""
     echo "  Backends:"
-    echo "    deepclaude                  # DeepSeek V4 Pro (default)"
+    echo "    deepclaude                  # DeepSeek V4.1 (default)"
     echo "    deepclaude -b or            # OpenRouter (cheapest)"
     echo "    deepclaude -b fw            # Fireworks AI (fastest)"
     echo "    deepclaude -b anthropic     # Normal Claude Code"
@@ -116,8 +116,8 @@ show_status() {
 
 show_cost() {
     echo ""
-    echo "  DeepSeek V4 Pro Pricing"
-    echo "  ======================="
+    echo "  DeepSeek V4.1 Pricing"
+    echo "  ===================="
     echo ""
     echo "  Provider        Input/M    Output/M   Cache Hit/M"
     echo "  ----------      --------   --------   -----------"
@@ -174,9 +174,9 @@ run_benchmark() {
     for name in deepseek openrouter fireworks; do
         local url="" key="" model=""
         case "$name" in
-            deepseek)   url="$DEEPSEEK_URL"; key="${DEEPSEEK_API_KEY:-}"; model="deepseek-v4-pro" ;;
-            openrouter) url="$OPENROUTER_URL"; key="${OPENROUTER_API_KEY:-}"; model="deepseek/deepseek-v4-pro" ;;
-            fireworks)  url="$FIREWORKS_URL"; key="${FIREWORKS_API_KEY:-}"; model="accounts/fireworks/models/deepseek-v4-pro" ;;
+            deepseek)   url="$DEEPSEEK_URL"; key="${DEEPSEEK_API_KEY:-}"; model="deepseek-v4.1" ;;
+            openrouter) url="$OPENROUTER_URL"; key="${OPENROUTER_API_KEY:-}"; model="deepseek/deepseek-v4.1" ;;
+            fireworks)  url="$FIREWORKS_URL"; key="${FIREWORKS_API_KEY:-}"; model="accounts/fireworks/models/deepseek-v4.1" ;;
         esac
         if [[ -z "$key" ]]; then echo "  $name: SKIP (no key)"; continue; fi
         local start_ms=$(date +%s%3N 2>/dev/null || python3 -c 'import time;print(int(time.time()*1000))')
